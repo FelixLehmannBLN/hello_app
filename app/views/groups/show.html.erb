@@ -2,7 +2,7 @@
 
 <% @group.members.each do |member| %>
   <%= member.username %>
-  <% if current_user_admin? %>
+  <% if current_user_admin?(@group) %>
   <%= link_to "remove", '#' %>
   <% end %>
 <% end %>

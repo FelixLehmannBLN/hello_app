@@ -4,8 +4,10 @@
 
 <p>
   <%= link_to group.name, group %>
+  <% if current_user_admin?(group) %>
   <%= link_to "Edit", edit_group_path(group) %>
   <%= link_to "Delete", group, method: :delete, data: { confirm: "Delete group?"} %>
+  <% end %>
 </p>
 
 <% end %>

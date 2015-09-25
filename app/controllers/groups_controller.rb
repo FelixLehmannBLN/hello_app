@@ -1,6 +1,7 @@
 class GroupsController < ApplicationController
   before_action :set_group, only: [:edit, :update, :destroy]
   before_action :correct_group_user, only: [:show]
+  before_action :authenticate_user!
 
   def index
     @groups = current_user.groups
@@ -57,8 +58,8 @@ class GroupsController < ApplicationController
       redirect_to root_url if @group.nil?
     end
 
-    def current_user_admin?
-    @membership = @group.memberships.find_by(user_id: current_user.id, group_id: params[:id])
+    def current_user_admin?(group)
+    @membership = group.memberships.find_by(user_id: current_user.id, group_id: group.id)
     @membership.admin == true
     end
 
