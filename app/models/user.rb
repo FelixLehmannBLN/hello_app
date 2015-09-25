@@ -12,6 +12,8 @@ class User < ActiveRecord::Base
 
   has_many :comments
   has_many :posts
+  has_many :memberships
+  has_many :groups, through: :memberships
 
   def self.find_for_database_authentication(warden_conditions)
     conditions = warden_conditions.dup

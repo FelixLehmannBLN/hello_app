@@ -10,12 +10,13 @@
   <header class="header">
     <div class="wrapper">
       <div class="logo">
-        <p><%= link_to "hello!", root_path %></p>
+        <p><%= link_to "hello", root_path %></p>
       </div>
       <div id="nav_buttons">
         <% if user_signed_in? %>
           <%= link_to "New Post", new_post_path %>
-          <%= link_to "Edit your Account", edit_user_registration_path %>
+          <%= link_to "My Account", edit_user_registration_path %>
+          <%= link_to "My Groups", groups_path %>
         <% else %>
           <%= link_to "Sign in", new_user_session_path %>
           <%= link_to "Register", new_user_registration_path %>

@@ -12,9 +12,4 @@ class ApplicationController < ActionController::Base
     devise_parameter_sanitizer.for(:sign_in) { |u| u.permit(:login, :username, :email, :password, :remember_me) }
     devise_parameter_sanitizer.for(:account_update) { |u| u.permit(:username, :email, :password, :password_confirmation, :current_password) }
   end
-
-    def correct_user
-      @user = User.find(params[:id])
-      redirect_to root_path unless currecnt_user == @user
-    end
 end
