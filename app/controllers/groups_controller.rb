@@ -2,7 +2,6 @@ class GroupsController < ApplicationController
   before_action :set_group, only: [:edit, :update, :destroy]
   before_action :correct_group_user, only: [:show]
 
-
   def index
     @groups = current_user.groups
   end
@@ -19,7 +18,7 @@ class GroupsController < ApplicationController
   def create
     @group = Group.new(group_params)
     @group.members << current_user
-    current_user.is_admin? = true
+    @group.memberships.first.admin = true
     if @group.save
       redirect_to groups_path
     else
@@ -34,10 +33,12 @@ class GroupsController < ApplicationController
   end
 
   def destroy
-    if user.is_admin?
+    if current_user_admin?
       @group.destroy
+      redirect_to groups_path
     else
-      puts "You don't have permission to delete groups"
+      redirect_to groups_path
+      flash[:alert] = 'No permission to do that'
     end
   end
 
@@ -56,4 +57,10 @@ class GroupsController < ApplicationController
       redirect_to root_url if @group.nil?
     end
 
+    def current_user_admin?
+    @membership = @group.memberships.find_by(user_id: current_user.id, group_id: params[:id])
+    @membership.admin == true
+    end
+
+    helper_method :current_user_admin?
 end
