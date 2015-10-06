@@ -1,10 +1,12 @@
 class GroupsController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_group, only: [:edit, :update, :destroy]
   before_action :correct_group_user, only: [:show]
-  before_action :authenticate_user!
+  before_action :current_user_admin?, only: [:edit]
 
   def index
-    @groups = current_user.groups
+    @user_groups = current_user.groups
+    @groups = Group.all
   end
 
   def show
@@ -27,14 +29,43 @@ class GroupsController < ApplicationController
     end
   end
 
+  def join
+    @group = Group.find(params[:id])
+    @member = @group.memberships.build(:user_id => current_user.id)
+    if @member.save
+      flash[:notice] = "Welcome the #{@group.name}"
+      redirect_to groups_path
+    else
+      redirect_to groups_path
+    end
+  end
+
+  def leave
+    @group = Group.find(params[:id])
+    @membership = @group.memberships.find_by(user_id: current_user.id, group_id: group.id)
+    if @member.destroy
+      flash[:notice] = "You left the group #{@group.name}"
+      redirect_to groups_path
+    else
+      redirect_to groups_path
+    end
+  end
+
   def edit
   end
 
   def update
-  end
+    if current_user_admin?(@group)
+      @group.update_attributes(group_params)
+      redirect_to groups_path
+      else
+        redirect_to groups_path
+        flash[:alert] = 'No permission to do that'
+      end
+    end
 
   def destroy
-    if current_user_admin?
+    if current_user_admin?(@group)
       @group.destroy
       redirect_to groups_path
     else
@@ -55,12 +86,12 @@ class GroupsController < ApplicationController
 
     def correct_group_user
       @group = current_user.groups.find_by(id: params[:id])
-      redirect_to root_url if @group.nil?
+      redirect_to groups_url if @group.nil?
     end
 
-    def current_user_admin?(group)
-    @membership = group.memberships.find_by(user_id: current_user.id, group_id: group.id)
-    @membership.admin == true
+    def current_user_admin?(group = @group)
+      @membership = group.memberships.find_by(user_id: current_user.id, group_id: group.id)
+      @membership.admin
     end
 
     helper_method :current_user_admin?

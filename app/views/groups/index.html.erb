@@ -1,15 +1,26 @@
 <h1>Your Groups</h1>
 
-<% @groups.each do |group| %>
+<% @user_groups.each do |group| %>
 
 <p>
   <%= link_to group.name, group %>
   <% if current_user_admin?(group) %>
-  <%= link_to "Edit", edit_group_path(group) %>
-  <%= link_to "Delete", group, method: :delete, data: { confirm: "Delete group?"} %>
+    <%= link_to "Edit", edit_group_path(group) %>
+    <%= link_to "Delete", group_path(group), method: :delete, data: { confirm: "Delete group?"} %>
   <% end %>
 </p>
 
 <% end %>
 
 <p><%= link_to "Create a group", new_group_path %></p>
+
+<% @groups.each do |group| %>
+
+<p>
+  <% unless group.members.include?(current_user) %>
+    <%= link_to group.name, group %>
+    <%= link_to "Join", join_group_path(group) %>
+  <% end %>
+</p>
+
+<% end %>

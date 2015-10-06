@@ -1,5 +1,8 @@
 Rails.application.routes.draw do
-  resources :groups
+  resources :groups do
+    get 'join', on: :member
+    # get 'leave', on: :member
+  end
   devise_for :users
   authenticated do
     root :to => 'posts#index', as: :authenticated

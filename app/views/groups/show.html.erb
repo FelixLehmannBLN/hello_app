@@ -1,8 +1,9 @@
 <h1><%= @group.name %></h1>
 
 <% @group.members.each do |member| %>
-  <%= member.username %>
+  <p><%= member.username %></p>
   <% if current_user_admin?(@group) %>
   <%= link_to "remove", '#' %>
   <% end %>
 <% end %>
+<%= link_to "Leave group", '#' %>
