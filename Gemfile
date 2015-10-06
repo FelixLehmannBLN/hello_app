@@ -14,6 +14,9 @@ gem 'devise', '~> 3.5.2'
 gem 'simple_form', '~> 3.2.0'
 gem 'cancancan', '~> 1.12.0'
 gem 'kaminari', '~> 0.16.3'
+gem 'bootstrap-sass', '~> 3.3.5.1'
+gem 'autoprefixer-rails'
+
 
 
 group :development, :test do

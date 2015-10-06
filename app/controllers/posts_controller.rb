@@ -5,7 +5,7 @@ class PostsController < ApplicationController
 
 
 def index
-  @posts = Post.all
+  @posts = Post.where("group_id IN (?)", current_user.group_ids)
 end
 
 def show
@@ -44,7 +44,7 @@ end
 private
 
   def post_params
-      params.require(:post).permit(:title, :content)
+      params.require(:post).permit(:title, :content, :group_id)
   end
 
   def set_post

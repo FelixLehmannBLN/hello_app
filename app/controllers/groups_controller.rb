@@ -42,7 +42,7 @@ class GroupsController < ApplicationController
 
   def leave
     @group = Group.find(params[:id])
-    @membership = @group.memberships.find_by(user_id: current_user.id, group_id: group.id)
+    @member = @group.memberships.find_by(user_id: current_user.id, group_id: @group.id)
     if @member.destroy
       flash[:notice] = "You left the group #{@group.name}"
       redirect_to groups_path

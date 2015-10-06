@@ -1,26 +1,33 @@
-<h1>Your Groups</h1>
+<div class="container">
+  <h1>Your Groups</h1>
 
-<% @user_groups.each do |group| %>
+  <% @user_groups.each do |group| %>
 
-<p>
-  <%= link_to group.name, group %>
-  <% if current_user_admin?(group) %>
-    <%= link_to "Edit", edit_group_path(group) %>
-    <%= link_to "Delete", group_path(group), method: :delete, data: { confirm: "Delete group?"} %>
+    <div>
+      <%= link_to group.name, group, class:"col-md-4" %>
+      <%= link_to "leave", leave_group_path(group), class:"btn btn-default btn-xs" %>
+      <% if current_user_admin?(group) %>
+        <%= link_to "Edit", edit_group_path(group), class:"btn btn-default btn-xs" %>
+        <%= link_to "Delete", group_path(group), method: :delete, data: { confirm: "Delete group?"}, class:"btn btn-default btn-xs" %>
+      <% end %>
+    </div>
   <% end %>
-</p>
+</div>
 
-<% end %>
 
-<p><%= link_to "Create a group", new_group_path %></p>
+<div class="container">
+  <h3>Other Groups</h3>
+  <% @groups.each do |group| %>
+  <div>
+    <% unless group.members.include?(current_user) %>
+      <%= link_to group.name, group, class:"col-md-4" %>
+      <%= link_to "Join", join_group_path(group), class:"btn btn-default btn-xs" %>
+    <% end %>
+  </div>
 
-<% @groups.each do |group| %>
-
-<p>
-  <% unless group.members.include?(current_user) %>
-    <%= link_to group.name, group %>
-    <%= link_to "Join", join_group_path(group) %>
   <% end %>
-</p>
+</div>
 
-<% end %>
+<div class="container">
+  <%= link_to "Create a group", new_group_path, class:"btn btn-default btn-lg" %>
+</div>
